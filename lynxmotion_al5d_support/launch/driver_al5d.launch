@@ -1,0 +1,11 @@
+<launch>
+  <group ns="joint_controller">
+    <include file="$(find lynxmotion_al5d_support)/launch/load_al5d.launch" />
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  </group>
+  <node name="lynxmotion_ssc32_driver" pkg="lynxmotion_ssc32" type="ssc32_node" output="screen">
+    <rosparam command="load" file="$(find lynxmotion_al5d_support)/config/al5d.config" />
+  </node>
+</launch>
+

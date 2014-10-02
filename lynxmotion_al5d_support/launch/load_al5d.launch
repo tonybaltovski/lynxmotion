@@ -1,0 +1,4 @@
+<launch>
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find lynxmotion_al5d_support)/urdf/al5d.xacro'" />
+</launch>
+

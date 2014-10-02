@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <property name="base_height" value="0.043" />
+  <property name="base_radius" value="0.048" />
+  <property name="link1_height" value="0.006" />
+  <property name="link1_radius" value="0.048" />
+  <property name="link2_offset" value="0.022" />
+  <property name="link2_length" value="0.14605" />
+  <property name="link3_length" value="0.187325" />
+  <property name="link4_length" value="0.032" />
+  <property name="gripper_offset" value="0.016" />
+  
+  <xacro:macro name="lynxmotion_al5d" params="prefix">
+    <!-- links -->
+    <link name="${prefix}base_link">
+      <visual>
+        <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="${base_height}" radius="${base_radius}"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="${base_height}" radius="${link1_radius}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_1">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder length="${link1_height}" radius="${link1_radius}"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+           <cylinder length="${link1_height}" radius="${base_radius}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_2">
+      <visual>
+        <origin xyz="0 0 ${base_height + link1_height + link2_offset}" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 .02 ${link2_length-0.02}"/>
+        </geometry>
+        <material name="silver">
+          <color rgba="0.8 0.8 0.8 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${base_height + link1_height + link2_offset}" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 .02 ${link2_length}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_3">
+      <visual>
+        <origin xyz="0 0 ${link3_length/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 ${link3_length-0.02}"/>
+        </geometry>
+        <material name="silver">
+          <color rgba="0.8 0.8 0.8 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${link3_length/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 ${link3_length}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_4">
+      <visual>
+        <origin xyz="0 0 ${link4_length/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 ${link4_length}"/>>
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${link4_length/2}" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 ${link4_length}"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}gripper">
+      <visual>
+        <origin xyz="0 0 0.025" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.05 0.05 0.05"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.025" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.05 0.05 0.05"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- joints -->
+    <joint name="${prefix}joint_1" type="revolute">
+      <origin xyz="0 0 ${base_height + link1_height/2}" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}link_1"/>
+      <axis xyz="0 0 -1"/>
+      <limit lower="-1.57079632679" upper="1.57079632679" effort="0" velocity="3.67"/>
+    </joint>
+    <joint name="${prefix}joint_2" type="revolute">
+      <origin xyz="0 0 ${link2_offset}" rpy="0 0 0"/>
+      <parent link="${prefix}link_1"/>
+      <child link="${prefix}link_2"/>
+      <axis xyz="0 -1 0"/>
+      <limit lower="-1.57079632679" upper="1.57079632679" effort="0" velocity="3.32"/>
+    </joint>
+    <joint name="${prefix}joint_3" type="revolute">
+      <origin xyz="0 0 ${link2_length}" rpy="0 1.57079632679 0" />
+      <parent link="${prefix}link_2"/>
+      <child link="${prefix}link_3"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="-1.57079632679" upper="1.57079632679" effort="0" velocity="3.67"/>
+    </joint>
+    <joint name="${prefix}joint_4" type="revolute">
+      <origin xyz="0 0 ${link3_length}" rpy="0 0 0"/>
+      <parent link="${prefix}link_3"/>
+      <child link="${prefix}link_4"/>
+      <axis xyz="0 -1 0"/>
+      <limit lower="-1.57079632679" upper="1.57079632679" effort="0" velocity="6.98"/>
+    </joint>
+    <joint name="${prefix}end_effector" type="revolute">
+      <origin xyz="0 0 ${link4_length + gripper_offset}" rpy="0 0 0"/>
+      <parent link="${prefix}link_4"/>
+      <child link="${prefix}gripper"/>
+      <axis xyz="-1 0 0"/>
+      <limit lower="-1.57079632679" upper="1.57079632679" effort="0" velocity="6.98"/>
+    </joint>
+    
+  </xacro:macro>
+</robot>

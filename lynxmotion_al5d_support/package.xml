@@ -1,0 +1,18 @@
+<package>
+<name>lynxmotion_al5d_support</name>
+<version>0.0.0</version>
+<description>The lynxmotion_al5d_support package</description>
+<author>Balto</author>
+<maintainer email="balto@balto.com">Balto</maintainer>
+<license>BSD</license>
+
+<buildtool_depend>catkin</buildtool_depend>
+<run_depend>joint_state_publisher</run_depend>
+<run_depend>robot_state_publisher</run_depend>
+<run_depend>rviz</run_depend>
+<run_depend>xacro</run_depend>
+<run_depend>lynxmotion_ssc32</run_depend>
+<export>
+<architecture_independent />
+</export>
+</package>
