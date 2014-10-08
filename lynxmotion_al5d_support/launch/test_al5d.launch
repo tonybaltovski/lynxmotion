@@ -1,8 +1,8 @@
 <launch>
   <include file="$(find lynxmotion_al5d_support)/launch/load_al5d.launch" />
   <param name="use_gui" value="true" />
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-  <node name="rviz" pkg="rviz" type="rviz" />
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />
+  <node name="rviz" pkg="rviz" type="rviz" output="screen" />
 </launch>
 
