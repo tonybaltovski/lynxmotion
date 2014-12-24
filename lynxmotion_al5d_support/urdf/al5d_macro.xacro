@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
+  <xacro:property name="M_PI" value="3.14159"/>
+
   <property name="base_height" value="0.043" />
   <property name="base_radius" value="0.048" />
   <property name="link1_height" value="0.006" />
@@ -11,7 +13,13 @@
   <property name="link4_length" value="0.032" />
   <property name="gripper_offset" value="0.016" />
   
-  <xacro:macro name="lynxmotion_al5d" params="prefix">
+  <xacro:macro name="lynxmotion_al5d" params="prefix parent_link *origin">
+    <!-- attach -->
+    <joint name="arm_base_joint" type="fixed">
+      <insert_block name="origin" />
+      <parent link="${parent_link}"/>
+      <child link="${prefix}base_link" />
+    </joint>
     <!-- links -->
     <link name="${prefix}base_link">
       <visual>
@@ -122,36 +130,35 @@
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1"/>
       <axis xyz="0 0 -1"/>
-      <limit lower="-1.57079632679" upper="1.57079632679" effort="0" velocity="3.67"/>
+      <limit lower="-${M_PI/2}" upper="${M_PI/2}" effort="0" velocity="3.67"/>
     </joint>
     <joint name="${prefix}joint_2" type="revolute">
       <origin xyz="0 0 ${link2_offset}" rpy="0 0 0"/>
       <parent link="${prefix}link_1"/>
       <child link="${prefix}link_2"/>
       <axis xyz="0 -1 0"/>
-      <limit lower="-1.57079632679" upper="1.57079632679" effort="0" velocity="3.32"/>
+      <limit lower="-${M_PI/2}" upper="${M_PI/2}" effort="0" velocity="3.32"/>
     </joint>
     <joint name="${prefix}joint_3" type="revolute">
-      <origin xyz="0 0 ${link2_length}" rpy="0 1.57079632679 0" />
+      <origin xyz="0 0 ${link2_length}" rpy="0 ${M_PI/2} 0" />
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
-      <limit lower="-1.57079632679" upper="1.57079632679" effort="0" velocity="3.67"/>
+      <limit lower="-${M_PI/2}" upper="${M_PI/2}" effort="0" velocity="3.67"/>
     </joint>
     <joint name="${prefix}joint_4" type="revolute">
       <origin xyz="0 0 ${link3_length}" rpy="0 0 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="0 -1 0"/>
-      <limit lower="-1.57079632679" upper="1.57079632679" effort="0" velocity="6.98"/>
+      <limit lower="-${M_PI/2}" upper="${M_PI/2}" effort="0" velocity="6.98"/>
     </joint>
-    <joint name="${prefix}end_effector" type="revolute">
+    <joint name="${prefix}gripper" type="revolute">
       <origin xyz="0 0 ${link4_length + gripper_offset}" rpy="0 0 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}gripper"/>
       <axis xyz="-1 0 0"/>
-      <limit lower="-1.57079632679" upper="1.57079632679" effort="0" velocity="6.98"/>
+      <limit lower="-${M_PI/2}" upper="${M_PI/2}" effort="0" velocity="6.98"/>
     </joint>
-    
   </xacro:macro>
 </robot>
