@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <launch>
   <group ns="joint_controller">
     <include file="$(find lynxmotion_al5d_support)/launch/load_al5d.launch" />
